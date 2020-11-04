@@ -1,0 +1,4 @@
+$ npm i chalk@4.1.0
+$ npm i yargs@16.1.0
+$ sudo npm i nodemon@2.0.6 -g
+$ npm init
