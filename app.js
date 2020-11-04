@@ -32,8 +32,11 @@ yargs.command({
 		}
 	},
 	handler: function(argv){
-		console.log("+++ You want to add a new note")
-		console.log("Title: " + argv.title + "\nContent: " + argv.body )
+		//console.log("+++ You want to add a new note")
+		//console.log("Title: " + argv.title + "\nContent: " + argv.body )
+
+		notes.addNote(argv.title, argv.body)
+		
 	}  
 })
 
