@@ -12,7 +12,7 @@ const success = chalk.green.bold.inverse('+SUCCESS')
 	loading and saving data at JSON file 
 */
 
-const loadNotes = function(){
+const loadNotes = () => {
 	//If we don't have a notes.json, I return an empty array
 	try	{
 		const buffer = fs.readFileSync('notes.json')
@@ -23,7 +23,7 @@ const loadNotes = function(){
 	}
 }
 
-const saveNotes = function(jsonData){
+const saveNotes = (jsonData) => {
 	const notes = JSON.stringify(jsonData)
 	fs.writeFileSync('notes.json', notes)
 }
@@ -34,13 +34,11 @@ const saveNotes = function(jsonData){
 */
 
 
-const addNote = function(title, body){
+const addNote = (title, body) => {
 	const notes = loadNotes()
-	const duplicateNote = notes.filter(function(note){
-		return note.title === title
-	})
+	const duplicateNote = notes.find((note) => note.title === title)
 
-	if (duplicateNote.length === 0) {
+	if (!duplicateNote) {
 		notes.push({
 			title: title,
 			body: body
@@ -54,12 +52,14 @@ const addNote = function(title, body){
 	//return JSON.stringify(loadNotes)
 }
 
+/*
+	Remove Function: Remove a specific note 
+*/
 
-const removeNote = function(title){
+
+const removeNote = (title) => {
 	const notes = loadNotes()
-	const notesToKeep = notes.filter(function(note){
-		return note.title !== title 
-	})
+	const notesToKeep = notes.filter((note) => note.title !== title)
 
 	if (notes.length > notesToKeep.length ){
 		saveNotes(notesToKeep)
@@ -71,8 +71,41 @@ const removeNote = function(title){
 
 }
 
+/*
+	List Function: List titles for all the notes
+*/
+
+const listNotes = () => {
+	const notes = loadNotes()
+	console.log(success + '\n' + chalk.bold.cyan.inverse('\tYour Notes:'))
+	
+	notes.forEach((note) => {
+		console.log('\t-------')
+		console.log(chalk.cyan('\tTitle: ') + note.title)
+	})
+}
+
+/*
+	Read Function: read a note
+*/
+const readNote = (title) => {
+	const notes = loadNotes()
+	const note = notes.find((note) => note.title === title)
+
+
+	if (!note) {
+        console.log(warning + "  There is no note with this title!")
+	} else {
+		console.log(success + '\n' + chalk.bold.cyan.inverse('\n\tYour Note:'))
+		console.log('\t-------')
+		console.log(chalk.cyan('\tTitle: ') + note.title + chalk.cyan('\n\tContent: ') + note.body)
+
+	}	
+}
 
 module.exports = {
 	addNote: addNote,
-	removeNote: removeNote
+	removeNote: removeNote,
+	listNotes: listNotes,
+	readNote: readNote
 }
